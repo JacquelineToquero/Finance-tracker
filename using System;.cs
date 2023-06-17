@@ -1,116 +1,137 @@
+using System;
+using System.Collections.Generic;
+
+namespace FinanceTracker
 {
-            int Savings = 5000;
-            int SavingsinFood = 1000;
-            int SavingsinSchool = 300;
-            int SavingsinTransportation = 500;
-    
+    class Transaction
+    {
+        public DateTime Date { get; set; }
+        public string Description { get; set; }
+        public decimal Amount { get; set; }
+    }
 
-            Console.WriteLine("\nFINANCE TRACKER");
-         
+    class Program
+    {
+        static List<Transaction> transactions = new List<Transaction>();
+
+        static void Main(string[] args)
+        {
+            bool isRunning = true;
+
+            while (isRunning)
+            {
+                Console.WriteLine("Finance Tracker");
+                Console.WriteLine("----------------");
+                Console.WriteLine("1. Add Transaction");
+                Console.WriteLine("2. View Transactions");
+                Console.WriteLine("3. Calculate Balance");
+                Console.WriteLine("4. Exit");
+                Console.WriteLine();
+
+                Console.Write("Enter your choice (1-4): ");
+                string choice = Console.ReadLine();
+                Console.WriteLine();
+
+                switch (choice)
                 {
-                    Console.WriteLine("\nMENU");
-                    Console.WriteLine("1. View Savings");
-                    Console.WriteLine("2. View Budget");
-                    Console.WriteLine("Enter 0 to Exit");
-
-                    Console.Write("\nEnter your choice: ");
-                    string? userInput = Console.ReadLine();
-
-                    while (userInput != "0")
-                    {
-                        switch (userInput)
-                    {
-                        case "1":
-                            Console.WriteLine("\nYour Savings is " + Savings);
-
-                            Console.WriteLine("\nMENU");
-                            Console.WriteLine("1. View Savings");
-                            Console.WriteLine("2. View Budget");
-                            Console.WriteLine("Enter 0 to Exit");
-
-                            Console.Write("\nEnter your choice: ");
-                            userInput = Console.ReadLine();
-                            break;
-
-                        case "2":
-                            Console.WriteLine("\nMENU");
-                            Console.WriteLine("1. View Savings in Food");
-                            Console.WriteLine("2. View Savings in School");
-                            Console.WriteLine("3. to View Savings in Transportation");
-                            
-                            Console.Write("\nEnter your choice: ");
-                            string? userChoice = Console.ReadLine();
-                    
-                                if (userChoice == "1") 
-                                {
-                                    Console.WriteLine("\nYour Savings in Food is " + SavingsinFood);
-                                    Console.WriteLine("\nMENU");
-                                    Console.WriteLine("1. View Savings");
-                                    Console.WriteLine("2. View Budget");
-                                    Console.WriteLine("Enter 0 to Exit");
-
-                                    Console.Write("\nEnter your choice: ");
-                                    userInput = Console.ReadLine();
-
-
-                                }
-
-                                else if (userChoice == "2") 
-                                {
-                                    Console.WriteLine("\nYour Savings in School is " + SavingsinSchool);
-                                    Console.WriteLine("\nMENU");
-                                    Console.WriteLine("1. View Savings");
-                                    Console.WriteLine("2. View Budget");
-                                    Console.WriteLine("Enter 0 to Exit");
-
-                                    Console.Write("\nEnter your choice: ");
-                                    userInput = Console.ReadLine();
-                                    
-
-                                }
-
-                                else if (userChoice == "3") 
-                                {
-                                    Console.WriteLine("\nYour Savings in Transportation is " + SavingsinTransportation);
-                                    Console.WriteLine("\nMENU");
-                                    Console.WriteLine("1. View Savings");
-                                    Console.WriteLine("2. View Budget");
-                                    Console.WriteLine("Enter 0 to Exit");
-
-                                    Console.Write("\nEnter your choice: ");
-                                    userInput = Console.ReadLine();
-
-                                }
-                                else
-                                {
-                                    Console.WriteLine("\nInvalid Choice. Please try again.");
-
-                                    Console.WriteLine("\nMENU");
-                                    Console.WriteLine("1. View Savings in Food");
-                                    Console.WriteLine("2. View Savings in School");
-                                    Console.WriteLine("3. to View Savings in Transportation");
-                                    
-                                    Console.Write("\nEnter your choice: ");
-                                    userChoice = Console.ReadLine();
-                                }
-
+                    case "1":
+                        AddTransaction();
                         break;
-
-                        default:
-                            Console.WriteLine("\nInvalid input. Please try again.\n");
-                            Console.WriteLine("\nMENU");
-                            Console.WriteLine("1. View Savings");
-                            Console.WriteLine("2. View Budget");
-                            Console.WriteLine("Enter 0 to Exit");
-
-                            Console.Write("\nEnter your choice: ");
-                            userInput = Console.ReadLine();
+                    case "2":
+                        ViewTransactions();
                         break;
+                    case "3":
+                        CalculateBalance();
+                        break;
+                    case "4":
+                        isRunning = false;
+                        break;
+                    default:
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        break;
+                }
 
-                        
-                    
-
+                Console.WriteLine();
+            }
         }
-                    }
+
+        static void AddTransaction()
+        {
+            Console.WriteLine("Add Transaction");
+            Console.WriteLine("----------------");
+            Console.Write("Enter the transaction date (yyyy-mm-dd): ");
+            DateTime date = DateTime.Parse(Console.ReadLine());
+            Console.WriteLine("Enter the transaction description: ");
+            Console.WriteLine("1. Income");
+            Console.WriteLine("2. Expense");
+            Console. WriteLine("3. Exit");
+            string description = Console.ReadLine();
+            Console.Write("Enter the transaction amount: ");
+            decimal amount = decimal.Parse(Console.ReadLine());
+
+            Transaction transaction = new Transaction
+            {
+                Date = date,
+                Description = description,
+                Amount = amount
+            };
+
+            bool isRunning = true;
+            {
+                switch(description)
+
+            {
+                case "1":
+                    description = "Income";
+                    transactions.Add(transaction);
+                    break;
+                case "2":
+                    description = "Expense";
+                    transaction.Amount *= -1;
+                    transactions.Add(transaction);
+                    break;
+                case "3":
+                    isRunning = false;
+                    break;
+                default:
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        break;
+                
+                
+
+            }
+            }
+
+            
+
+            Console.WriteLine("Transaction added successfully!");
+        }
+
+        static void ViewTransactions()
+        {
+            Console.WriteLine("View Transactions");
+            Console.WriteLine("----------------");
+
+            foreach (var transaction in transactions)
+            {
+                string type = transaction.Amount >= 0 ? "Income" : "Expense";
+                Console.WriteLine($"{transaction.Date.ToShortDateString()} - {type} - ${Math.Abs(transaction.Amount)}");
+            }
+        }
+
+        static void CalculateBalance()
+        {
+            Console.WriteLine("Calculate Balance");
+            Console.WriteLine("----------------");
+
+            decimal balance = 0;
+
+            foreach (var transaction in transactions)
+            {
+                balance += transaction.Amount;
+            }
+
+            Console.WriteLine($"Current Balance: ${balance}");
+        }
     }
 }
