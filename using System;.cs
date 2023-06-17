@@ -64,7 +64,7 @@ namespace FinanceTracker
             Console.WriteLine("Enter the transaction description: ");
             Console.WriteLine("1. Income");
             Console.WriteLine("2. Expense");
-            Console. WriteLine("3. Exit");
+            Console.WriteLine("3. Exit");
             string description = Console.ReadLine();
             Console.Write("Enter the transaction amount: ");
             decimal amount = decimal.Parse(Console.ReadLine());
@@ -78,31 +78,31 @@ namespace FinanceTracker
 
             bool isRunning = true;
             {
-                switch(description)
+                switch (description)
 
-            {
-                case "1":
-                    description = "Income";
-                    transactions.Add(transaction);
-                    break;
-                case "2":
-                    description = "Expense";
-                    transaction.Amount *= -1;
-                    transactions.Add(transaction);
-                    break;
-                case "3":
-                    isRunning = false;
-                    break;
-                default:
+                {
+                    case "1":
+                        description = "Income";
+                        transactions.Add(transaction);
+                        break;
+                    case "2":
+                        description = "Expense";
+                        transaction.Amount *= -1;
+                        transactions.Add(transaction);
+                        break;
+                    case "3":
+                        isRunning = false;
+                        break;
+                    default:
                         Console.WriteLine("Invalid choice. Please try again.");
                         break;
-                
-                
 
-            }
+
+
+                }
             }
 
-            
+
 
             Console.WriteLine("Transaction added successfully!");
         }
@@ -115,7 +115,7 @@ namespace FinanceTracker
             foreach (var transaction in transactions)
             {
                 string type = transaction.Amount >= 0 ? "Income" : "Expense";
-                Console.WriteLine($"{transaction.Date.ToShortDateString()} - {type} - ${Math.Abs(transaction.Amount)}");
+                Console.WriteLine(₱"{transaction.Date.ToShortDateString()} - {type} - ₱{Math.Abs(transaction.Amount)}");
             }
         }
 
@@ -131,7 +131,7 @@ namespace FinanceTracker
                 balance += transaction.Amount;
             }
 
-            Console.WriteLine($"Current Balance: ${balance}");
+            Console.WriteLine(₱"Current Balance: ₱{balance}");
         }
     }
 }
