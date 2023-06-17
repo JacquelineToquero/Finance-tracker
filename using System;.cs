@@ -115,7 +115,7 @@ namespace FinanceTracker
             foreach (var transaction in transactions)
             {
                 string type = transaction.Amount >= 0 ? "Income" : "Expense";
-                Console.WriteLine(₱"{transaction.Date.ToShortDateString()} - {type} - ₱{Math.Abs(transaction.Amount)}");
+                Console.WriteLine($"{transaction.Date.ToShortDateString()} - {type} - P{Math.Abs(transaction.Amount)}");
             }
         }
 
@@ -131,7 +131,7 @@ namespace FinanceTracker
                 balance += transaction.Amount;
             }
 
-            Console.WriteLine(₱"Current Balance: ₱{balance}");
+            Console.WriteLine($"Current Balance: P{balance}");
         }
     }
 }
