@@ -1,3 +1,4 @@
+
 using System;
 using System.Collections.Generic;
 
@@ -5,133 +6,189 @@ namespace FinanceTracker
 {
     class Transaction
     {
+        public string Type { get; set; }
         public DateTime Date { get; set; }
         public string Description { get; set; }
-        public decimal Amount { get; set; }
+        public string Category { get; set; }
+        public double Amount { get; set; }
+
+        public Transaction(string type, DateTime date, string description, string category, double amount)
+        {
+            Type = type;
+            Date = date;
+            Description = description;
+            Category = category;
+            Amount = amount;
+        }
+
+        public override string ToString()
+        {
+            return $"Type: {Type}, Date: {Date}, Description: {Description}, Category: {Category}, Amount: {Amount}";
+        }
     }
 
     class Program
     {
-        static List<Transaction> transactions = new List<Transaction>();
-
-        static void Main(string[] args)
+        static void Main()
         {
-            bool isRunning = true;
+            Console.WriteLine("\n ------------------------------ ");
+            Console.WriteLine("|        FINANCE TRACKER       |");
+            Console.WriteLine(" ------------------------------ ");
 
-            while (isRunning)
+            List<string> categories = new List<string>();
+            categories.Add("Food");
+            categories.Add("Transportation");
+
+            List<Transaction> transactions = new List<Transaction>();
+
+            DisplayMenu();
+
+            string choice = Console.ReadLine();
+
+            while (choice != "0")
             {
-                Console.WriteLine("Finance Tracker");
-                Console.WriteLine("----------------");
-                Console.WriteLine("1. Add Transaction");
-                Console.WriteLine("2. View Transactions");
-                Console.WriteLine("3. Calculate Balance");
-                Console.WriteLine("4. Exit");
-                Console.WriteLine();
-
-                Console.Write("Enter your choice (1-4): ");
-                string choice = Console.ReadLine();
-                Console.WriteLine();
-
                 switch (choice)
                 {
                     case "1":
-                        AddTransaction();
+                        AddTransaction(transactions, categories);
                         break;
                     case "2":
-                        ViewTransactions();
+                        RemoveTransaction(transactions);
                         break;
                     case "3":
-                        CalculateBalance();
+                        Console.WriteLine("\n ------------------------------ ");
+                        Console.WriteLine("|       VIEW TRANSACTIONS      |");
+                        Console.WriteLine(" ------------------------------ ");
+                        ViewTransactions(transactions);
                         break;
                     case "4":
-                        isRunning = false;
+                        CalculateBalance(transactions);
+                        break;
+                    case "5":
+                        ViewCategories(categories);
                         break;
                     default:
-                        Console.WriteLine("Invalid choice. Please try again.");
+                        Console.WriteLine("\nInvalid input. Please try again.");
                         break;
                 }
-
-                Console.WriteLine();
+                DisplayMenu();
+                choice = Console.ReadLine();
             }
+
         }
 
-        static void AddTransaction()
+        static void DisplayMenu()
         {
-            Console.WriteLine("Add Transaction");
-            Console.WriteLine("----------------");
+            Console.WriteLine("\nMENU");
+            Console.WriteLine("--------------------");
+            Console.WriteLine("1. Add Transaction");
+            Console.WriteLine("2. Remove Transaction");
+            Console.WriteLine("3. View Transactions");
+            Console.WriteLine("4. Calculate Balance");
+            Console.WriteLine("5. View Categories");
+            Console.WriteLine("Press 0 to Exit.");
+
+            Console.Write("\nEnter your choice: ");
+
+        }
+
+        static void AddTransaction(List<Transaction> transactions, List<string> categories)
+        {
+            Console.WriteLine("\n ------------------------------ ");
+            Console.WriteLine("|        ADD TRANSACTIONS      |");
+            Console.WriteLine(" ------------------------------ ");
             Console.Write("Enter the transaction date (yyyy-mm-dd): ");
-            DateTime date = DateTime.Parse(Console.ReadLine());
-            Console.WriteLine("Enter the transaction description: ");
+            DateTime date = DateTime.Parse(Console.ReadLine() ?? string.Empty);
+            Console.WriteLine("\nChoose transaction type: ");
             Console.WriteLine("1. Income");
             Console.WriteLine("2. Expense");
-            Console.WriteLine("3. Exit");
-            string description = Console.ReadLine();
-            Console.Write("Enter the transaction amount: ");
-            decimal amount = decimal.Parse(Console.ReadLine());
-
-            Transaction transaction = new Transaction
+            Console.WriteLine("Press 0 to Exit.");
+            Console.Write("\nEnter choice: ");
+            string type = Console.ReadLine() ?? string.Empty;
+            Console.Write("\nEnter description: ");
+            string description = Console.ReadLine() ?? string.Empty;
+            Console.WriteLine("\nChoose a category.");
+            int i = 1;
+            foreach (string var in categories)
             {
-                Date = date,
-                Description = description,
-                Amount = amount
-            };
+                Console.WriteLine($"{i}. {var}");
+                i++;
+            }
+            Console.Write("\nEnter choice: ");
+            string category = Console.ReadLine() ?? string.Empty;
+            Console.Write("\nEnter the amount: ");
+            double amount = Convert.ToDouble(Console.ReadLine());
 
-            bool isRunning = true;
+
+            switch (type)
             {
-                switch (description)
-
-                {
-                    case "1":
-                        description = "Income";
-                        transactions.Add(transaction);
-                        break;
-                    case "2":
-                        description = "Expense";
-                        transaction.Amount *= -1;
-                        transactions.Add(transaction);
-                        break;
-                    case "3":
-                        isRunning = false;
-                        break;
-                    default:
-                        Console.WriteLine("Invalid choice. Please try again.");
-                        break;
-
-
-
-                }
+                case "1":
+                    type = "Income";
+                    transactions.Add(new Transaction(type, date, description, category, amount));
+                    break;
+                case "2":
+                    type = "Expense";
+                    amount *= -1;
+                    transactions.Add(new Transaction(type, date, description, category, amount));
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice. Please try again.");
+                    break;
             }
 
+            Console.WriteLine("\nTransaction successfully added!");
 
-
-            Console.WriteLine("Transaction added successfully!");
         }
 
-        static void ViewTransactions()
+        static void RemoveTransaction(List<Transaction> transactions)
         {
-            Console.WriteLine("View Transactions");
-            Console.WriteLine("----------------");
+            Console.WriteLine("\nChoose a transaction you want to remove.");
+            ViewTransactions(transactions);
+            Console.Write("Enter your choice: ");
+            int choice = Convert.ToInt32(Console.ReadLine()) - 1;
+
+            transactions.RemoveAt(choice);
+
+
+            Console.WriteLine("\nTransactions successfully updated!");
+
+
+
+        }
+
+        static void ViewTransactions(List<Transaction> transactions)
+        {
+
 
             foreach (var transaction in transactions)
             {
-                string type = transaction.Amount >= 0 ? "Income" : "Expense";
-                Console.WriteLine($"{transaction.Date.ToShortDateString()} - {type} - P{Math.Abs(transaction.Amount)}");
+
+                Console.WriteLine($"{transaction.Date.ToShortDateString()} - {transaction.Type} - P{Math.Abs(transaction.Amount)}");
             }
         }
 
-        static void CalculateBalance()
+        static void CalculateBalance(List<Transaction> transactions)
         {
-            Console.WriteLine("Calculate Balance");
-            Console.WriteLine("----------------");
-
-            decimal balance = 0;
+            double totalBalance = 0;
 
             foreach (var transaction in transactions)
             {
-                balance += transaction.Amount;
+                totalBalance = +transaction.Amount;
+            }
+        }
+
+        static void ViewCategories(List<string> categories)
+        {
+            int i = 1;
+            Console.WriteLine("\n ------------------------------ ");
+            Console.WriteLine("|          CATEGORIES          |");
+            Console.WriteLine(" ------------------------------ ");
+            foreach (var category in categories)
+            {
+                Console.WriteLine($"{i}. {category}");
+                i++;
             }
 
-            Console.WriteLine($"Current Balance: P{balance}");
         }
     }
 }
