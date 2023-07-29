@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 
@@ -38,7 +37,11 @@ namespace FinanceTracker
             List<string> categories = new List<string>();
             categories.Add("Food");
             categories.Add("Transportation");
-
+            categories.Add("Savings");
+            categories.Add("Home & Utilities");
+            categories.Add("Personal & Medical Expense");
+            categories.Add("School");
+            
             List<Transaction> transactions = new List<Transaction>();
 
             DisplayMenu();
@@ -163,7 +166,7 @@ namespace FinanceTracker
             foreach (var transaction in transactions)
             {
 
-                Console.WriteLine($"{transaction.Date.ToShortDateString()} - {transaction.Type} - P{Math.Abs(transaction.Amount)}");
+                Console.WriteLine($"{transaction.Date.ToShortDateString()} - {transaction.Description} - {transaction.Type} - P{Math.Abs(transaction.Amount)}");
             }
         }
 
@@ -173,8 +176,9 @@ namespace FinanceTracker
 
             foreach (var transaction in transactions)
             {
-                totalBalance = +transaction.Amount;
+                totalBalance += transaction.Amount;
             }
+            Console.WriteLine("Total balance: " + totalBalance);
         }
 
         static void ViewCategories(List<string> categories)
